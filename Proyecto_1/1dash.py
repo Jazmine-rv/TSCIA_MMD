@@ -18,26 +18,20 @@ st.set_page_config(
 )
 
 # Carpeta donde están los CSV
-CARPETA = r"C:\\BELTRAN\\Ciencia\\MINERIA\\TP1"
+CARPETA_DATOS = "Proyecto_1"  # o el nombre de tu carpeta
 
-def listar_csv():
-    """Listar todos los archivos CSV disponibles"""
-    try:
-        archivos = [f for f in os.listdir(CARPETA) if f.endswith(".csv")]
-        return archivos
-    except FileNotFoundError:
-        st.error(f"❌ No se encontró la carpeta: {CARPETA}")
-        return []
-
-def cargar_datos(archivo):
-    """Cargar datos desde CSV"""
-    ruta = os.path.join(CARPETA, archivo)
-    try:
-        df = pd.read_csv(ruta)
-        return df, ruta
-    except Exception as e:
-        st.error(f"Error al cargar el archivo: {e}")
-        return pd.DataFrame(), ruta
+# Verificar si la carpeta existe
+if not os.path.exists(CARPETA_DATOS):
+    st.error(f"❌ No se encontró la carpeta: {CARPETA_DATOS}")
+    st.info("Asegúrate de que los archivos CSV estén en una carpeta llamada 'data' en tu repositorio")
+else:
+    # Cargar archivos CSV
+    archivos_csv = [f for f in os.listdir(CARPETA_DATOS) if f.endswith('.csv')]
+    
+    if not archivos_csv:
+        st.error("❌ No se encontraron archivos CSV en la carpeta especificada.")
+    else:
+        st.success(f"✅ Se encontraron {len(archivos_csv)} archivos CSV")
 
 def guardar_datos(df, ruta):
     """Guardar DataFrame en archivo CSV"""
@@ -669,4 +663,5 @@ def main():
                 st.sidebar.warning(f"**Valores nulos:** {nulos}")
 
 if __name__ == "__main__":
+
     main()
